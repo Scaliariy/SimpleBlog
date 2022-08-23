@@ -1,28 +1,19 @@
 <?php
 
 include("includes/includes.php");
-include("includes/db.php");
 
-$connection = new createCon();
-$connection->connect();
-
-$blogPosts = getBlogPosts($connection->myconn);
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <!--	<link rel="stylesheet" href="includes/style.css" type="text/css" media="screen" title="no title" charset="utf-8">-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <title>Simple Blog</title>
 </head>
 
 <body>
-
 <div class="container">
-    <div class="row">
+    <div class="row text-center p-5">
         <div class="col">
             <h1>My Simple Blog</h1>
         </div>
@@ -37,18 +28,18 @@ $blogPosts = getBlogPosts($connection->myconn);
             <div class="col">
                 <div class="p-3 border bg-light">
                     <h6>
-                        <?php negativePostCount($connection->myconn) ?>
+                        <?php BlogPost::negativePostCount($connection->myconn) ?>
                     </h6>
                 </div>
             </div>
             <div class="col">
                 <div class="p-3 border bg-light">
-                    <h6><?php allPostCount($connection->myconn) ?></h6>
+                    <h6><?php BlogPost::allPostCount($connection->myconn) ?></h6>
                 </div>
             </div>
             <div class="col">
                 <div class="p-3 border bg-light">
-                    <h6><?php positivePostCount($connection->myconn) ?></h6>
+                    <h6><?php BlogPost::positivePostCount($connection->myconn) ?></h6>
                 </div>
             </div>
         </div>
@@ -59,7 +50,7 @@ $blogPosts = getBlogPosts($connection->myconn);
         </div>
         <div class="col">
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Add Post
             </button>
 
@@ -72,56 +63,83 @@ $blogPosts = getBlogPosts($connection->myconn);
                             <h5 class="modal-title" id="exampleModalLabel">Post</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form>
-                            <div class="modal-body">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon1">@</span>
-                                    <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                                           aria-describedby="basic-addon1">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
+<!--                        <form id="postform" method="post">-->
+<!--                            <div class="modal-body">-->
+<!--                                <div class="input-group mb-3">-->
+<!--                                    <label>-->
+<!--                                        <input type="text" class="form-control" name="name" id="name">-->
+<!--                                    </label>-->
+<!--                                </div>-->
+<!--                                <div class="mb-3 text-start">-->
+<!--                                    <label for="post">Post:</label>-->
+<!--                                    <textarea class="form-control" id="post" rows="3" name="post"></textarea>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="modal-footer">-->
+<!--                                <button type="submit" class="btn btn-primary" name="submitPost" id="submitPost">Submit-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </form>-->
+
+                        <div id="postData"></div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col"><form id="myForm">
+                <input type="text" name="name" placeholder="Your name" required />
+                <input type="text" name="post" placeholder="Text" required />
+                <input type="submit" name="submit" value="Submit Form" />
+            </form></div>
     </div>
-    <div class="row g-5 justify-content-center">
+    <div id="modifiersDiv">
+        <p>Start</p>
+    </div>
+    <div  class="row g-5 justify-content-center">
 
-        <?php
-        foreach ($blogPosts as $post) {
-            echo "<div class='col-12 p-3 border bg-light'>";
-            echo "<h2>" . $post->title . "</h2>";
-            echo "<p>" . $post->post . "</p>";
-            echo "<span>Posted By: " . $post->author . " Posted On: " . $post->datePosted . " Grade: " . $post->grade . " </span>";
-
-            if (postHaveComment($connection->myconn, $post->id)) {
-                $blogComment = getPostComment($connection->myconn, $post->id);
-                foreach ($blogComment as $comm) {
-                    echo "<div class='col-12 p-3 border bg-white'>";
-                    echo "<h3>" . $comm->user_name . "</h3>";
-                    echo "<p>" . $comm->comment . "</p>";
-                    echo "<span>Posted On: " . $comm->date . "</span>";
-                    echo "</div>";
-                }
-            }
-            echo "<hr><button type='button' class='btn btn-secondary'>Add Comment</button>";
-            echo "</div>";
-        }
-        ?>
+        <?php printPostsAndComments($connection->myconn);?>
 
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
         crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#myForm').submit(function(e){
+            e.preventDefault();
+            $.ajax({
+                url: "includes/db_insert.php",
+                type: "POST",
+                data: $(this).serialize(),
+                // success: function(data){
+                //     var jsonData = JSON.parse(data);
+                //     console.log(jsonData);
+                // },
+                success: function (data) {
+                        $.each(JSON.parse(data), function(i, field){
+                            $("#modifiersDiv").append("<p>" + field.name + ", " + field.post + ", " + field.date_posted + "</p>");
+                        });
+                    // $.each(data, function(key, item) {
+                    //     var text = "<p>" + item.name + ", " + item.post + ", " + item.date_posted + "</p>";
+                        // var text = "<p>" + item.name + "</p>";
+                        // var text = "<p>" + item.post + "</p>";
+                        // var text = "<p>" + item.date_posted + "</p>";
+
+                        // $(text).appendTo('#modifiersDiv');
+                        // $("#modifiersDiv").html(data);
+                    // });
+                    // $('#addModifiers').modal('show');
+                },
+                error: function(){
+                    alert("Form submission failed!");
+                }
+            });
+        });
+    });
+</script>
 </body>
 
 </html>

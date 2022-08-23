@@ -1,69 +1,50 @@
 <?php
 include 'blogpost.php';
 include 'comment.php';
+include 'includes/db.php';
 
-function getBlogPosts($connection, $inId = null, $inTagId = null)
-{
-    if (!empty($inId)) {
-        $query = mysqli_query($connection, "SELECT * FROM blog_posts WHERE id = " . $inId . " ORDER BY id DESC");
-    } else if (!empty($inTagId)) {
-        $query = mysqli_query($connection, "SELECT blog_posts.* FROM blog_post_tags LEFT JOIN (blog_posts) ON (blog_post_tags.blog_post_id = blog_posts.id) WHERE blog_post_tags.tag_id =" . $inTagId . " ORDER BY blog_posts.id DESC");
-    } else {
-        $query = mysqli_query($connection, "SELECT * FROM blog_posts ORDER BY id DESC");
+$connection = new createCon();
+$connection->connect();
+
+function printPostsAndComments($connect){
+    foreach (BlogPost::getBlogPosts($connect) as $key => $post) {
+        echo "<div class='col-12 p-3 border bg-light'>";
+        echo "<p>by " . $post->name . "</p>";
+        echo "<p>" . $post->post . "</p>";
+        echo "<span>" . $post->date . " Grade: " . "null" . " </span>";
+        $values[$key] = array(
+            'name' => $post->name,
+            'post' => $post->post,
+            'date' => $post->date,
+
+        );
+        if (Comment::postHaveComment($connect, $post->id)) {
+            foreach (Comment::getPostComment($connect, $post->id) as $comm) {
+                echo "<div class='col-12 p-3 border bg-white'>";
+                echo "<p>by " . $comm->user_name . "</p>";
+                echo "<p>" . $comm->comment . "</p>";
+                echo "<span>" . $comm->date . "</span>";
+                echo "</div>";
+                $values[$key][] = array(
+                    'comments' => array(
+                        'comment_name' => $comm->user_name,
+                        'comment' => $comm->comment,
+                        'date' => $comm->date,
+                    ),
+
+                );
+            }
+        }
+        echo "<hr><button type='button' class='btn btn-secondary'>Add Comment</button>";
+        echo "</div>";
     }
-
-    $postArray = array();
-    while ($row = mysqli_fetch_assoc($query)) {
-        $myPost = new BlogPost($connection, $row["id"], $row['title'], $row['post'], $row["author_id"], $row["grade"], $row['date_posted']);
-        array_push($postArray, $myPost);
-    }
-    return $postArray;
+//    var_dump($values);
+//    echo json_encode($values, JSON_FORCE_OBJECT);
+    return $values;
 }
 
-function postHaveComment($connection, $post_id = null)
-{
-    if (!empty($post_id)) {
-        $str = "SELECT comments.* FROM comments WHERE post_id = " . $post_id . " ORDER BY id DESC";
-        mysqli_query($connection, $str);
-        return true;
-    }
-    return false;
-}
 
-function getPostComment($connection, $post_id = null)
-{
-    if (!empty($post_id)) {
-        $query = mysqli_query($connection, "SELECT comments.* FROM comments WHERE post_id = " . $post_id . " ORDER BY id DESC");
-    }
 
-    $commentArray = array();
-    while ($row = mysqli_fetch_assoc($query)) {
-        $comment = new Comment($row["post_id"], $row['comment'], $row['user_name'], $row["grade"], $row['date']);
-        array_push($commentArray, $comment);
-    }
-    return $commentArray;
-}
 
-function negativePostCount($connection)
-{
-    $query = mysqli_query($connection, "SELECT count(grade) FROM blog_posts WHERE grade < 3");
-    $row = mysqli_fetch_assoc($query);
 
-    echo "Negative Posts: " . $row['count(grade)'];
-}
 
-function allPostCount($connection)
-{
-    $query = mysqli_query($connection, "SELECT count(grade) FROM blog_posts");
-    $row = mysqli_fetch_assoc($query);
-
-    echo "All Posts: " . $row['count(grade)'];
-}
-
-function positivePostCount($connection)
-{
-    $query = mysqli_query($connection, "SELECT count(grade) FROM blog_posts WHERE grade > 3");
-    $row = mysqli_fetch_assoc($query);
-
-    echo "Positive Posts: " . $row['count(grade)'];
-}

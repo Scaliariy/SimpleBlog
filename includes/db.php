@@ -13,14 +13,12 @@ class createCon  {
             die('Could not connect to database!');
         } else {
             $this->myconn = $con;
-//            echo 'Connection established!';
         }
         return $this->myconn;
     }
 
     function close() {
         mysqli_close($this->myconn);
-        echo 'Connection closed!';
     }
 
 }
