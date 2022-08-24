@@ -20,6 +20,10 @@ function printPostsAndComments($connect)
             'date_post' => $post->date,
 
         );
+        echo "<div id='commDiv'>";
+        printFormComment($post->id);
+        echo "</div>";
+        echo "<hr>";
         if (Comment::postHaveComment($connect, $post->id)) {
             foreach (Comment::getPostComment($connect, $post->id) as $comm) {
                 echo "<div id='commentDiv' class='col-12 p-3 border bg-white'>";
@@ -37,36 +41,28 @@ function printPostsAndComments($connect)
                 );
             }
         }
-        echo "<hr>";
-        echo "<div id='commDiv'>";
-        printFormComment($post->id);
-//        echo "<hr><button type='button' class='btn btn-secondary'>Add Comment</button>";
-        echo "</div>";
         echo "</div>";
     }
-//    var_dump($values);
-//    echo json_encode($values, JSON_FORCE_OBJECT);
     return $values;
 }
 
 function printFormComment($post_id)
 {
-//    echo $comm;
     echo "<!-- Button trigger modal -->
             <button type='button' class='btn btn-success' data-bs-toggle='modal' data-bs-target='#commentModal" . $post_id . "'>
                 Add Comment
             </button>
 
             <!-- Modal -->
-            <div class='modal fade' id='commentModal" . $post_id . "' tabindex='-1' aria-labelledby='commentModalLabel'
+            <div class='modal' id='commentModal" . $post_id . "' tabindex='-1' aria-labelledby='commentModal" . $post_id . "Label'
                  aria-hidden='true'>
                 <div class='modal-dialog modal-dialog-centered'>
                     <div class='modal-content'>
                         <div class='modal-header'>
-                            <h5 class='modal-title' id='commentModalLabel'>Comment</h5>
+                            <h5 class='modal-title' id='commentModal" . $post_id . "Label'>Comment</h5>
                             <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                         </div>
-                        <form id='commentForm'>
+                        <form class='commentForm'>
                             <div class='modal-body'>
                                 <div class='input-group mb-3'>
                                     <label>
@@ -80,7 +76,7 @@ function printFormComment($post_id)
                                 </div>
                             </div>
                             <div class='modal-footer'>
-                                <button type='submit' class='btn btn-primary' name='submit' id='btnCommSave'>Submit
+                                <button type='submit' class='btnCommSave btn btn-primary' name='submit'>Submit
                                 </button>
                             </div>
                         </form>

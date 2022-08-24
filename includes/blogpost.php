@@ -46,7 +46,7 @@ class BlogPost
 
         $postArray = array();
         while ($row = mysqli_fetch_assoc($query)) {
-            $myPost = new BlogPost($row["id"],$row["post"], $row['name'], $row['date_posted']);
+            $myPost = new BlogPost($row["id"], $row["post"], $row['name'], $row['date_posted']);
             array_push($postArray, $myPost);
         }
         return $postArray;
@@ -75,13 +75,5 @@ class BlogPost
 
         echo "Positive Posts: " . $row['count(grade)'];
     }
-
-//    static public function getGrade($connection)
-//    {
-//        $query = mysqli_query($connection, "select count(grade) from grades join blog_posts bp on grades.post_id = bp.id");
-//        $row = mysqli_fetch_assoc($query);
-//        return $row['count(grade)'];
-//    }
-
 }
 

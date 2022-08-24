@@ -52,18 +52,4 @@ class Comment
         $query = "insert into comments (post_id, comment, user_name, date) values (" . $this->post_id . ", '" . $this->comment . "', '" . $this->user_name . "', curdate())";
         mysqli_query($connection, $query);
     }
-
-//    /**
-//     * @param mixed $comment
-//     */
-//    public function saveComment($post_id, $comment, $user_name, $grade, $date): void
-//    {
-//        $this->post_id = $post_id;
-//        $this->comment = $comment;
-//        $this->user_name = $user_name;
-//        $this->grade = $grade;
-//        $this->date = $date;
-//
-//    }
-
 }
