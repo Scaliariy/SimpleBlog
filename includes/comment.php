@@ -47,6 +47,12 @@ class Comment
         return $commentArray;
     }
 
+    public function createComment($connection)
+    {
+        $query = "insert into comments (post_id, comment, user_name, date) values (" . $this->post_id . ", '" . $this->comment . "', '" . $this->user_name . "', curdate())";
+        mysqli_query($connection, $query);
+    }
+
 //    /**
 //     * @param mixed $comment
 //     */

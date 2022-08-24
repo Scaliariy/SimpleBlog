@@ -53,51 +53,11 @@ include("includes/includes.php");
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Add Post
             </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Post</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-<!--                        <form id="postform" method="post">-->
-<!--                            <div class="modal-body">-->
-<!--                                <div class="input-group mb-3">-->
-<!--                                    <label>-->
-<!--                                        <input type="text" class="form-control" name="name" id="name">-->
-<!--                                    </label>-->
-<!--                                </div>-->
-<!--                                <div class="mb-3 text-start">-->
-<!--                                    <label for="post">Post:</label>-->
-<!--                                    <textarea class="form-control" id="post" rows="3" name="post"></textarea>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="modal-footer">-->
-<!--                                <button type="submit" class="btn btn-primary" name="submitPost" id="submitPost">Submit-->
-<!--                                </button>-->
-<!--                            </div>-->
-<!--                        </form>-->
-
-                        <div id="postData"></div>
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class="col"><form id="myForm">
-                <input type="text" name="name" placeholder="Your name" required />
-                <input type="text" name="post" placeholder="Text" required />
-                <input type="submit" name="submit" value="Submit Form" />
-            </form></div>
     </div>
-    <div id="modifiersDiv">
-        <p>Start</p>
-    </div>
-    <div  class="row g-5 justify-content-center">
+    <div id="rowPosts" class="row g-5 justify-content-center">
 
-        <?php printPostsAndComments($connection->myconn);?>
+        <?php printPostsAndComments($connection->myconn); ?>
 
     </div>
 </div>
@@ -105,41 +65,93 @@ include("includes/includes.php");
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
         crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        crossorigin="anonymous"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        $('#myForm').submit(function(e){
+    $(document).ready(function () {
+        $('#myForm').submit(function (e) {
             e.preventDefault();
             $.ajax({
                 url: "includes/db_insert.php",
                 type: "POST",
                 data: $(this).serialize(),
-                // success: function(data){
-                //     var jsonData = JSON.parse(data);
-                //     console.log(jsonData);
-                // },
                 success: function (data) {
-                        $.each(JSON.parse(data), function(i, field){
-                            $("#modifiersDiv").append("<p>" + field.name + ", " + field.post + ", " + field.date_posted + "</p>");
-                        });
-                    // $.each(data, function(key, item) {
-                    //     var text = "<p>" + item.name + ", " + item.post + ", " + item.date_posted + "</p>";
-                        // var text = "<p>" + item.name + "</p>";
-                        // var text = "<p>" + item.post + "</p>";
-                        // var text = "<p>" + item.date_posted + "</p>";
-
-                        // $(text).appendTo('#modifiersDiv');
-                        // $("#modifiersDiv").html(data);
+                    // $.each(JSON.parse(data), function (i, field) {
+                    // console.log(field);
+                    // $("#modifiersDiv").append("<p>" + field.name + ", " + field.post + ", " + field.date + "</p>");
+                    // $("#rowPosts").load(location.href + " #rowPosts");
+                    $("#rowPosts").load(location.href + " #rowPosts>*", "");
                     // });
-                    // $('#addModifiers').modal('show');
                 },
-                error: function(){
+                error: function () {
                     alert("Form submission failed!");
                 }
             });
         });
     });
+    $(document).ready(function () {
+        $('#commentForm').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "includes/db_insert_comment.php",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function (data) {
+                    // $.each(JSON.parse(data), function (i, field) {
+                    // $("#modifiersDiv").append("<p>" + field.name + ", " + field.post + ", " + field.date + "</p>");
+                    // $("#rowPosts").load(location.href + " #rowPosts");
+                    $("#rowPosts").load(location.href + " #rowPosts>*", "");
+                    // console.log(":)");
+                    // });
+                },
+                error: function () {
+                    alert("Form submission failed!");
+                }
+            });
+        });
+    });
+    // $( window ).on( "load", function() {
+    //     console.log( "window loaded" );
+    // });
+    $('#btnSave').click(function () {
+        $('#exampleModal').modal('hide');
+    });
+    // $('#btnCommSave').click(function () {
+    //     // $('#commentModal').modal('hide');
+    //     // $('div[id^="list_"]')
+    //     $('div[id="commentModal"]').modal('hide');
+    // });
 </script>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="myForm">
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <label>
+                            <input class="form-control" type="text" name="name" placeholder="Your name"
+                                   required/>
+                        </label>
+                    </div>
+                    <div class="mb-3 text-start">
+                        <label for="post">Post:</label>
+                        <textarea class="form-control" name="post" placeholder="Text" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" name="submit" id="btnSave">Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>
