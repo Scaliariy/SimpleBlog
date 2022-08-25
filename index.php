@@ -103,6 +103,7 @@ include("includes/includes.php");
                 success: function (data) {
                     $("#rowPosts").load(location.href + " #rowPosts>*", "");
                     console.log("posts reloaded");
+                    // console.log(data)
                 },
                 error: function () {
                     alert("Form submission failed!");
@@ -111,7 +112,10 @@ include("includes/includes.php");
         });
     });
     $(document).ready(function () {
-        $('.commentForm').submit(function (e) {
+        // $('.commentForm').submit(function (e) {
+        // $('.commentForm').submit(function (e) {
+        $(document).on('submit', '.commentForm', function(e) {
+            e.preventDefault();
             $.ajax({
                 url: "includes/db_insert_comment.php",
                 type: "POST",
@@ -124,7 +128,26 @@ include("includes/includes.php");
                     alert("Form submission failed!");
                 }
             });
+
+        });
+    });
+    $(document).ready(function () {
+        // $('.rating').change(function (e) {
+        $(document).on("change", ".rating", function (e) {
             e.preventDefault();
+            $.ajax({
+                url: "includes/db_insert_grade.php",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function (data) {
+                    $("#rowPosts").load(location.href + " #rowPosts>*", "");
+                    console.log("grades reloaded");
+                },
+                error: function () {
+                    alert("Form submission failed!");
+                }
+            });
+
         });
     });
     $(document).ready(function () {
@@ -148,7 +171,8 @@ include("includes/includes.php");
         $('#exampleModal').modal('hide');
         console.log("post modal hidden");
     });
-    $('.btnCommSave').click(function () {
+    // $('.btnCommSave').click(function () {
+    $(document).on("click", ".btnCommSave", function () {
         $('.modal').modal('hide');
         console.log("comm modal hidden");
     });
