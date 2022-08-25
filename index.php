@@ -6,6 +6,7 @@ include("includes/includes.php");
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
     <title>Simple Blog</title>
 </head>
 
@@ -26,18 +27,18 @@ include("includes/includes.php");
             <div class="col">
                 <div class="p-3 border bg-light">
                     <h6>
-                        <?php BlogPost::negativePostCount($connection->myconn) ?>
+                        <?php BlogPost::negativePostCount() ?>
                     </h6>
                 </div>
             </div>
             <div class="col">
                 <div class="p-3 border bg-light">
-                    <h6><?php BlogPost::allPostCount($connection->myconn) ?></h6>
+                    <h6><?php BlogPost::allPostCount() ?></h6>
                 </div>
             </div>
             <div class="col">
                 <div class="p-3 border bg-light">
-                    <h6><?php BlogPost::positivePostCount($connection->myconn) ?></h6>
+                    <h6><?php BlogPost::positivePostCount() ?></h6>
                 </div>
             </div>
         </div>
@@ -54,7 +55,7 @@ include("includes/includes.php");
         </div>
     </div>
     <div id="rowPosts" class="row g-5 justify-content-center">
-        <?php printPostsAndComments($connection->myconn); ?>
+        <?php printPostsAndComments(); ?>
     </div>
 </div>
 <!-- Modal -->
@@ -126,6 +127,23 @@ include("includes/includes.php");
             e.preventDefault();
         });
     });
+    $(document).ready(function () {
+        $('.rating').change(function (e) {
+            $.ajax({
+                url: "includes/db_insert_grade.php",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function (data) {
+                    $("#rowPosts").load(location.href + " #rowPosts>*", "");
+                    console.log("grades reloaded");
+                },
+                error: function () {
+                    alert("Form submission failed!");
+                }
+            });
+            e.preventDefault();
+        });
+    });
     $('#btnSave').click(function () {
         $('#exampleModal').modal('hide');
         console.log("post modal hidden");
@@ -134,6 +152,8 @@ include("includes/includes.php");
         $('.modal').modal('hide');
         console.log("comm modal hidden");
     });
+
+
 </script>
 
 </body>
