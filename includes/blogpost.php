@@ -62,10 +62,10 @@ class BlogPost
 
     static function allPostCount($connection)
     {
-        $query = mysqli_query($connection, "select count(grade) from grades join blog_posts bp on grades.post_id = bp.id");
+        $query = mysqli_query($connection, "select count(id) from blog_posts");
         $row = mysqli_fetch_assoc($query);
 
-        echo "All Posts: " . $row['count(grade)'];
+        echo "All Posts: " . $row['count(id)'];
     }
 
     static function positivePostCount($connection)

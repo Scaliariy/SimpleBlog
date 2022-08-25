@@ -15,19 +15,22 @@ function printPostsAndComments($connect)
         echo "<p id='postNameP' >by " . $post->name . "</p>";
         echo "<p id='postPostP' >" . $post->post . "</p>";
         $grade = Grade::getRating($post->id)->grade;
-        echo "<span id='postDateSpan' >" . $post->date . " Grade: " . Grade::getRating($post->id)->grade . " </span>";
+        if ($grade == 0){
+            $grade = "No rating";
+        }
+        echo "<span id='postDateSpan' >" . $post->date . " <br> Average rating: " . $grade . " </span>";
         $values[$key] = array(
             'name_post' => $post->name,
             'post' => $post->post,
             'date_post' => $post->date,
 
         );
-        echo "<select class='rating' name='rating' id='rating_" . $post->id . "' data-id='rating_" . $post->id . "'>";
+        echo "<br><select class='rating' name='rating' id='rat' data-id='rating_" . $post->id . "'>";
         for ($i = 1;$i<=5;$i++){
-            if (Grade::getRating($post->id)->grade == $i) {
-                echo "<option selected value = '" . $i . "|" . $post->id . "' > " . $i . "</option >";
+            if (round(Grade::getRating($post->id)->grade) == $i) {
+                echo "<option selected value = '" . $i . "|" . $post->id . "' > " . str_repeat("⭐", $i) . "</option >";
             } else {
-                echo "<option value = '" . $i . "|" . $post->id . "' > " . $i . "</option >";
+                echo "<option value = '" . $i . "|" . $post->id . "' > " . str_repeat("⭐", $i) . "</option >";
             }
         }
         echo "</select>";

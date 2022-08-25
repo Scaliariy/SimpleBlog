@@ -21,23 +21,25 @@ include("includes/includes.php");
             <h1>Counter</h1>
         </div>
     </div>
-    <div class="container pb-5 text-center">
-        <div class="row g-5">
-            <div class="col">
-                <div class="p-3 border bg-light">
-                    <h6>
-                        <?php BlogPost::negativePostCount($connection->myconn) ?>
-                    </h6>
+    <div class="counters">
+        <div class="container pb-5 text-center">
+            <div class="row g-5">
+                <div class="col">
+                    <div class="p-3 border bg-light">
+                        <h6>
+                            <?php BlogPost::negativePostCount($connection->myconn) ?>
+                        </h6>
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="p-3 border bg-light">
-                    <h6><?php BlogPost::allPostCount($connection->myconn) ?></h6>
+                <div class="col">
+                    <div class="p-3 border bg-light">
+                        <h6><?php BlogPost::allPostCount($connection->myconn) ?></h6>
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="p-3 border bg-light">
-                    <h6><?php BlogPost::positivePostCount($connection->myconn) ?></h6>
+                <div class="col">
+                    <div class="p-3 border bg-light">
+                        <h6><?php BlogPost::positivePostCount($connection->myconn) ?></h6>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,6 +93,7 @@ include("includes/includes.php");
         crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
         crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.session@1.0.0/jquery.session.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $('#postForm').submit(function (e) {
@@ -101,6 +104,7 @@ include("includes/includes.php");
                 data: $(this).serialize(),
                 success: function (data) {
                     $("#rowPosts").load(location.href + " #rowPosts>*", "");
+                    $(".counters").load(location.href + " .counters>*", "");
                     console.log("posts reloaded");
                     // console.log(data)
                 },
@@ -113,7 +117,7 @@ include("includes/includes.php");
     $(document).ready(function () {
         // $('.commentForm').submit(function (e) {
         // $('.commentForm').submit(function (e) {
-        $(document).on('submit', '.commentForm', function(e) {
+        $(document).on('submit', '.commentForm', function (e) {
             e.preventDefault();
             $.ajax({
                 url: "includes/db_insert_comment.php",
@@ -131,29 +135,46 @@ include("includes/includes.php");
         });
     });
     $(document).ready(function () {
-        // $('.rating').change(function (e) {
-        $(document).on("change", ".rating", function (e) {
+        $('.rating').change(function (e) {
+            // $(document).on("change", ".rating", function (e) {
             e.preventDefault();
             $.ajax({
                 url: "includes/db_insert_grade.php",
                 type: "POST",
                 data: $(this).serialize(),
                 success: function (data) {
-                    $("#rowPosts").load(location.href + " #rowPosts>*", "");
+                    $.session.set("commented", "yes");
+                    $("#rowPosts").load(location.href + " #rowPosts>*", "", function() {
+                        if ($.session.get("commented") !== "yes") {
+                            $(".rating").prop('disabled', true);
+                            console.log("disabled ratings");
+                        }
+                        // else {
+                        //     $(".rating").prop('disabled', false);
+                        //     console.log("disabled enabled");
+                        // }
+                        // To set session:
+                        //
+                        //     $(function() {
+                        //         $.session.set("myVar", "Hello World!");
+                        //     });
+                        // To get session:
+                        //
+                        //     alert($.session.get("myVar"))
+                    });
+                    $(".counters").load(location.href + " .counters>*", "");
                     console.log("grades reloaded");
                 },
                 error: function () {
                     alert("Form submission failed!");
                 }
             });
-
         });
     });
     $('#btnSave').click(function () {
         $('#exampleModal').modal('hide');
         console.log("post modal hidden");
     });
-    // $('.btnCommSave').click(function () {
     $(document).on("click", ".btnCommSave", function () {
         $('.modal').modal('hide');
         console.log("comm modal hidden");

@@ -9,14 +9,19 @@ class Grade
     public function __construct($post_id, $grade)
     {
         $this->post_id = $post_id;
-        $this->grade = $grade;
+        if (empty($grade)){
+            $this->grade = 0;
+        } else {
+            $this->grade = $grade;
+        }
+
     }
 
     static function getRating($post_id)
     {
         $db = new createCon();
         $connection = $db->connect();
-        $query = mysqli_query($connection, "select round(avg(grade),0) as grade from grades join blog_posts bp on grades.post_id = bp.id where post_id = " . $post_id);
+        $query = mysqli_query($connection, "select round(avg(grade),1) as grade from grades join blog_posts bp on grades.post_id = bp.id where post_id = " . $post_id);
         $rating = mysqli_fetch_array($query);
         $postGrade = new Grade($post_id, $rating["grade"]);
 
