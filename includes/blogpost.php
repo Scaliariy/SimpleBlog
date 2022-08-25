@@ -30,18 +30,14 @@ class BlogPost
 
     }
 
-    public function createPost()
+    public function createPost($connection)
     {
-        $db = new Database();
-        $connection = $db->connect();
         $query = "insert into blog_posts (post, name, date_posted) values ('" . $this->post . "', '" . $this->name . "', curdate())";
         mysqli_query($connection, $query);
     }
 
-    static function getBlogPosts( $id = null)
+    static function getBlogPosts($connection, $id = null)
     {
-        $db = new Database();
-        $connection = $db->connect();
         if (!empty($id)) {
             $query = mysqli_query($connection, "SELECT * FROM blog_posts WHERE id = " . $id . " ORDER BY id DESC");
         } else {
@@ -56,30 +52,24 @@ class BlogPost
         return $postArray;
     }
 
-    static function negativePostCount()
+    static function negativePostCount($connection)
     {
-        $db = new Database();
-        $connection = $db->connect();
         $query = mysqli_query($connection, "SELECT count(grade) FROM grades join blog_posts bp on grades.post_id = bp.id WHERE grade < 3");
         $row = mysqli_fetch_assoc($query);
 
         echo "Negative Posts: " . $row['count(grade)'];
     }
 
-    static function allPostCount()
+    static function allPostCount($connection)
     {
-        $db = new Database();
-        $connection = $db->connect();
         $query = mysqli_query($connection, "select count(grade) from grades join blog_posts bp on grades.post_id = bp.id");
         $row = mysqli_fetch_assoc($query);
 
         echo "All Posts: " . $row['count(grade)'];
     }
 
-    static function positivePostCount()
+    static function positivePostCount($connection)
     {
-        $db = new Database();
-        $connection = $db->connect();
         $query = mysqli_query($connection, "select count(grade) from grades join blog_posts bp on grades.post_id = bp.id WHERE grade > 3");
         $row = mysqli_fetch_assoc($query);
 

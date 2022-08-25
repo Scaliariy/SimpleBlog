@@ -1,6 +1,6 @@
 <?php
 
-class Database  {
+class createCon  {
     var $host = 'localhost';
     var $user = 'root';
     var $pass = 'root';

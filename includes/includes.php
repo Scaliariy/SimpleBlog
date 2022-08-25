@@ -14,6 +14,7 @@ function printPostsAndComments($connect)
         echo "<div id='postDiv' class='col-12 p-3 border bg-light'>";
         echo "<p id='postNameP' >by " . $post->name . "</p>";
         echo "<p id='postPostP' >" . $post->post . "</p>";
+        $grade = Grade::getRating($post->id)->grade;
         echo "<span id='postDateSpan' >" . $post->date . " Grade: " . Grade::getRating($post->id)->grade . " </span>";
         $values[$key] = array(
             'name_post' => $post->name,
