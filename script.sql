@@ -1,3 +1,5 @@
+create schema if not exists blog;
+
 create table comments
 (
     id            int auto_increment
