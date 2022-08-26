@@ -24,6 +24,7 @@ function printPostsAndComments($connect)
 
         );
         echo "<br><select class='rating' name='rating'>";
+        echo "<option selected value=''>Select Rating</option>";
         for ($i = 1;$i<=5;$i++){
             if (round(Grade::getRating($post->id)->grade) == $i) {
                 echo "<option selected value = '" . $i . "|" . $post->id . "' > " . str_repeat("⭐", $i) . "</option >";
