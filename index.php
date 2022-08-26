@@ -103,10 +103,13 @@ include("includes/includes.php");
                 type: "POST",
                 data: $(this).serialize(),
                 success: function (data) {
-                    $("#rowPosts").load(location.href + " #rowPosts>*", "");
+                    $("#rowPosts").load(location.href + " #rowPosts>*", "", function () {
+                        if ($.session.get("showRate") === "0") {
+                            $(".rating").prop('disabled', true);
+                        }
+                    });
                     $(".counters").load(location.href + " .counters>*", "");
                     console.log("posts reloaded");
-                    // console.log(data)
                 },
                 error: function () {
                     alert("Form submission failed!");
@@ -115,8 +118,6 @@ include("includes/includes.php");
         });
     });
     $(document).ready(function () {
-        // $('.commentForm').submit(function (e) {
-        // $('.commentForm').submit(function (e) {
         $(document).on('submit', '.commentForm', function (e) {
             e.preventDefault();
             $.ajax({
@@ -124,7 +125,11 @@ include("includes/includes.php");
                 type: "POST",
                 data: $(this).serialize(),
                 success: function (data) {
-                    $("#rowPosts").load(location.href + " #rowPosts>*", "");
+                    $("#rowPosts").load(location.href + " #rowPosts>*", "", function () {
+                        if ($.session.get("showRate") === "0") {
+                            $(".rating").prop('disabled', true);
+                        }
+                    });
                     console.log("comments reloaded");
                 },
                 error: function () {
@@ -143,24 +148,13 @@ include("includes/includes.php");
                 type: "POST",
                 data: $(this).serialize(),
                 success: function (data) {
-                    $.session.set("commented", "yes");
-                    $("#rowPosts").load(location.href + " #rowPosts>*", "", function() {
-                        if ($.session.get("commented") !== "yes") {
+
+                    $("#rowPosts").load(location.href + " #rowPosts>*", "", function () {
+                        $.session.set("showRate", "0");
+                        // if (!$.session.get("showRate")) {
                             $(".rating").prop('disabled', true);
                             console.log("disabled ratings");
-                        }
-                        // else {
-                        //     $(".rating").prop('disabled', false);
-                        //     console.log("disabled enabled");
                         // }
-                        // To set session:
-                        //
-                        //     $(function() {
-                        //         $.session.set("myVar", "Hello World!");
-                        //     });
-                        // To get session:
-                        //
-                        //     alert($.session.get("myVar"))
                     });
                     $(".counters").load(location.href + " .counters>*", "");
                     console.log("grades reloaded");
@@ -179,6 +173,14 @@ include("includes/includes.php");
         $('.modal').modal('hide');
         console.log("comm modal hidden");
     });
+    $(window).on("unload", function(e) {
+        // $.session.remove("showRate");
+        $.session.set("showRate", "1");
+        console.log("showRate");
+    });
+//     $(document).ready(function () {
+// // your code
+//     });
 </script>
 
 </body>
