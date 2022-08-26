@@ -1,10 +1,12 @@
 <?php
-include 'blogpost.php';
-include 'comment.php';
+include 'Post.php';
+//include 'Comment.php';
+include 'db.php';
 
-$connect = new mysqli("localhost", "root", "root", "blog");
+$db = new Database();
+$connect = $db->getMyconn();
 
-$newPost = new BlogPost(null, $_POST['post'], $_POST['name'], null);
+$newPost = new Post(null, $_POST['post'], $_POST['name'], null);
 $newPost->createPost($connect);
 
 

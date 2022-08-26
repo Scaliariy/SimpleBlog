@@ -1,16 +1,14 @@
 <?php
 include 'includes/db.php';
-include 'blogpost.php';
-include 'comment.php';
+include 'Post.php';
+include 'Comment.php';
 include 'Grade.php';
 
-
-$connection = new createCon();
-$connection->connect();
+$connection = new Database();
 
 function printPostsAndComments($connect)
 {
-    foreach (BlogPost::getBlogPosts($connect) as $key => $post) {
+    foreach (Post::getBlogPosts($connect) as $key => $post) {
         echo "<div id='postDiv' class='col-12 p-3 border bg-light'>";
         echo "<p id='postNameP' >by " . $post->name . "</p>";
         echo "<p id='postPostP' >" . $post->post . "</p>";
@@ -18,14 +16,14 @@ function printPostsAndComments($connect)
         if ($grade == 0){
             $grade = "No rating";
         }
-        echo "<span id='postDateSpan' >" . $post->date . " <br> Average rating: " . $grade . " </span>";
+        echo "<span id='postDateSpan' >" . $post->date . "</span>";
         $values[$key] = array(
             'name_post' => $post->name,
             'post' => $post->post,
             'date_post' => $post->date,
 
         );
-        echo "<br><select class='rating' name='rating' id='rat' data-id='rating_" . $post->id . "'>";
+        echo "<br><select class='rating' name='rating'>";
         for ($i = 1;$i<=5;$i++){
             if (round(Grade::getRating($post->id)->grade) == $i) {
                 echo "<option selected value = '" . $i . "|" . $post->id . "' > " . str_repeat("⭐", $i) . "</option >";
@@ -34,6 +32,7 @@ function printPostsAndComments($connect)
             }
         }
         echo "</select>";
+        echo "<span> Average rating: " . $grade . "</span>";
         echo "<div id='commDiv'>";
         printFormComment($post->id);
         echo "</div>";
@@ -62,12 +61,11 @@ function printPostsAndComments($connect)
 
 function printFormComment($post_id)
 {
-    echo "<!-- Button trigger modal -->
+    echo "
             <button type='button' class='btn btn-success' data-bs-toggle='modal' data-bs-target='#commentModal" . $post_id . "'>
                 Add Comment
             </button>
 
-            <!-- Modal -->
             <div class='modal' id='commentModal" . $post_id . "' tabindex='-1' aria-labelledby='commentModal" . $post_id . "Label'
                  aria-hidden='true'>
                 <div class='modal-dialog modal-dialog-centered'>

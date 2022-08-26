@@ -1,8 +1,10 @@
 <?php
-include 'blogpost.php';
-include 'comment.php';
+include 'Post.php';
+include 'Comment.php';
+include 'db.php';
 
-$connect = new mysqli("localhost", "root", "root", "blog");
+$db = new Database();
+$connect = $db->getMyconn();
 
 $newComment = new Comment($_POST['post_id'],$_POST['comment'], $_POST['name'], null);
 $newComment->createComment($connect);

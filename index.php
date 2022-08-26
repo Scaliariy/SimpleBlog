@@ -27,18 +27,18 @@ include("includes/includes.php");
                 <div class="col">
                     <div class="p-3 border bg-light">
                         <h6>
-                            <?php BlogPost::negativePostCount($connection->myconn) ?>
+                            <?php Post::negativePostCount($connection->getMyconn()) ?>
                         </h6>
                     </div>
                 </div>
                 <div class="col">
                     <div class="p-3 border bg-light">
-                        <h6><?php BlogPost::allPostCount($connection->myconn) ?></h6>
+                        <h6><?php Post::allPostCount($connection->getMyconn()) ?></h6>
                     </div>
                 </div>
                 <div class="col">
                     <div class="p-3 border bg-light">
-                        <h6><?php BlogPost::positivePostCount($connection->myconn) ?></h6>
+                        <h6><?php Post::positivePostCount($connection->getMyconn()) ?></h6>
                     </div>
                 </div>
             </div>
@@ -49,17 +49,15 @@ include("includes/includes.php");
             <h1>Posts</h1>
         </div>
         <div class="col">
-            <!-- Button trigger modal -->
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Add Post
             </button>
         </div>
     </div>
     <div id="rowPosts" class="row g-5 justify-content-center">
-        <?php printPostsAndComments($connection->myconn); ?>
+        <?php printPostsAndComments($connection->getMyconn()); ?>
     </div>
 </div>
-<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -141,7 +139,6 @@ include("includes/includes.php");
     });
     $(document).ready(function () {
         $('.rating').change(function (e) {
-            // $(document).on("change", ".rating", function (e) {
             e.preventDefault();
             $.ajax({
                 url: "includes/db_insert_grade.php",
@@ -151,10 +148,8 @@ include("includes/includes.php");
 
                     $("#rowPosts").load(location.href + " #rowPosts>*", "", function () {
                         $.session.set("showRate", "0");
-                        // if (!$.session.get("showRate")) {
                             $(".rating").prop('disabled', true);
                             console.log("disabled ratings");
-                        // }
                     });
                     $(".counters").load(location.href + " .counters>*", "");
                     console.log("grades reloaded");
@@ -174,13 +169,9 @@ include("includes/includes.php");
         console.log("comm modal hidden");
     });
     $(window).on("unload", function(e) {
-        // $.session.remove("showRate");
         $.session.set("showRate", "1");
         console.log("showRate");
     });
-//     $(document).ready(function () {
-// // your code
-//     });
 </script>
 
 </body>

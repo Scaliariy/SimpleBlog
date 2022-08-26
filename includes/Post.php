@@ -1,6 +1,6 @@
 <?php
 
-class BlogPost
+class Post
 {
 
     public $id;
@@ -32,21 +32,21 @@ class BlogPost
 
     public function createPost($connection)
     {
-        $query = "insert into blog_posts (post, name, date_posted) values ('" . $this->post . "', '" . $this->name . "', curdate())";
+        $query = "insert into posts (post, name, date_posted) values ('" . $this->post . "', '" . $this->name . "', curdate())";
         mysqli_query($connection, $query);
     }
 
     static function getBlogPosts($connection, $id = null)
     {
         if (!empty($id)) {
-            $query = mysqli_query($connection, "SELECT * FROM blog_posts WHERE id = " . $id . " ORDER BY id DESC");
+            $query = mysqli_query($connection, "SELECT * FROM posts WHERE id = " . $id . " ORDER BY id DESC");
         } else {
-            $query = mysqli_query($connection, "SELECT * FROM blog_posts ORDER BY id DESC");
+            $query = mysqli_query($connection, "SELECT * FROM posts ORDER BY id DESC");
         }
 
         $postArray = array();
         while ($row = mysqli_fetch_assoc($query)) {
-            $myPost = new BlogPost($row["id"], $row["post"], $row['name'], $row['date_posted']);
+            $myPost = new Post($row["id"], $row["post"], $row['name'], $row['date_posted']);
             array_push($postArray, $myPost);
         }
         return $postArray;
@@ -54,26 +54,26 @@ class BlogPost
 
     static function negativePostCount($connection)
     {
-        $query = mysqli_query($connection, "SELECT count(grade) FROM grades join blog_posts bp on grades.post_id = bp.id WHERE grade < 3");
+        $query = mysqli_query($connection, "select count(DISTINCT post_id) as posts from grades join posts bp on grades.post_id = bp.id where grade < 3");
         $row = mysqli_fetch_assoc($query);
 
-        echo "Negative Posts: " . $row['count(grade)'];
+        echo "Negative Posts: " . $row['posts'];
     }
 
     static function allPostCount($connection)
     {
-        $query = mysqli_query($connection, "select count(id) from blog_posts");
+        $query = mysqli_query($connection, "select count(id) as posts from posts");
         $row = mysqli_fetch_assoc($query);
 
-        echo "All Posts: " . $row['count(id)'];
+        echo "All Posts: " . $row['posts'];
     }
 
     static function positivePostCount($connection)
     {
-        $query = mysqli_query($connection, "select count(grade) from grades join blog_posts bp on grades.post_id = bp.id WHERE grade > 3");
+        $query = mysqli_query($connection, "select count(DISTINCT post_id) as posts from grades join posts bp on grades.post_id = bp.id WHERE grade > 3");
         $row = mysqli_fetch_assoc($query);
 
-        echo "Positive Posts: " . $row['count(grade)'];
+        echo "Positive Posts: " . $row['posts'];
     }
 }
 
