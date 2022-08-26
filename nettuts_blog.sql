@@ -24,7 +24,7 @@ CREATE TABLE `blog_posts` (
   `title` varchar(255) NOT NULL default '',
   `post` text NOT NULL,
   `author_id` int(11) NOT NULL default '0',
-  `date_posted` date NOT NULL default '0000-00-00',
+  `created_at` created_at NOT NULL default '0000-00-00',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
@@ -32,7 +32,7 @@ CREATE TABLE `blog_posts` (
 -- Dumping data for table `blog_posts`
 --
 
-INSERT INTO `blog_posts` (`id`, `title`, `post`, `author_id`, `date_posted`) VALUES
+INSERT INTO `blog_posts` (`id`, `title`, `post`, `author_id`, `created_at`) VALUES
 (1, 'My First Blog Post!', 'This is my first post on my new simple blog!', 1, '2008-10-17'),
 (2, 'Web design!', 'This post is all about web design! I love web design!', 1, '2008-10-17'),
 (3, 'The Importance of UX', 'This post is all about user experience and how important it is while designing for the web.', 1, '2008-10-18');
@@ -64,8 +64,8 @@ INSERT INTO `blog_post_tags` (`blog_post_id`, `tag_id`) VALUES
 
 CREATE TABLE `people` (
   `id` int(11) NOT NULL auto_increment,
-  `first_name` varchar(255) NOT NULL default '',
-  `last_name` varchar(255) NOT NULL default '',
+  `first_visitore_name` varchar(255) NOT NULL default '',
+  `last_visitore_name` varchar(255) NOT NULL default '',
   `url` varchar(255) NOT NULL default '',
   `email` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
@@ -75,7 +75,7 @@ CREATE TABLE `people` (
 -- Dumping data for table `people`
 --
 
-INSERT INTO `people` (`id`, `first_name`, `last_name`, `url`, `email`) VALUES
+INSERT INTO `people` (`id`, `first_visitore_name`, `last_visitore_name`, `url`, `email`) VALUES
 (1, 'Ben', 'Mills', 'http://www.benmillsdesigns.com/', 'bmills@benmillsdesigns.com');
 
 -- --------------------------------------------------------
@@ -86,7 +86,7 @@ INSERT INTO `people` (`id`, `first_name`, `last_name`, `url`, `email`) VALUES
 
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
+  `visitore_name` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
@@ -94,6 +94,6 @@ CREATE TABLE `tags` (
 -- Dumping data for table `tags`
 --
 
-INSERT INTO `tags` (`id`, `name`) VALUES
+INSERT INTO `tags` (`id`, `visitore_name`) VALUES
 (1, 'Web Design'),
 (2, 'User Experience');

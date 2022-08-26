@@ -5,21 +5,18 @@ class Comment
 
     public $post_id;
     public $comment;
-    public $user_name;
-    public $date;
+    public $visitore_name;
+    public $created_at;
 
-    public function __construct($post_id, $comment, $user_name, $date)
+    public function __construct($post_id, $comment, $visitore_name, $created_at)
     {
         $this->post_id = $post_id;
         $this->comment = $comment;
-        if (!empty($user_name)) {
-            $this->user_name = $user_name;
-        } else {
-            $this->user_name = "Guest";
-        }
-        if (!empty($date)) {
-            $split_date = explode("-", $date);
-            $this->date = $split_date[1] . "." . $split_date[2] . "." . $split_date[0];
+        $this->visitore_name = $visitore_name;
+
+        if (!empty($created_at)) {
+            $split_created_at = explode("-", $created_at);
+            $this->created_at = $split_created_at[1] . "." . $split_created_at[2] . "." . $split_created_at[0];
         }
     }
 
@@ -41,7 +38,7 @@ class Comment
 
         $commentArray = array();
         while ($row = mysqli_fetch_assoc($query)) {
-            $comment = new Comment($row["post_id"], $row['comment'], $row['user_name'], $row['date']);
+            $comment = new Comment($row["post_id"], $row['comment'], $row['visitore_name'], $row['created_at']);
             array_push($commentArray, $comment);
         }
         return $commentArray;
@@ -49,7 +46,7 @@ class Comment
 
     public function createComment($connection)
     {
-        $query = "insert into comments (post_id, comment, user_name, date) values (" . $this->post_id . ", '" . $this->comment . "', '" . $this->user_name . "', curdate())";
+        $query = "insert into comments (post_id, comment, visitore_name, created_at) values (" . $this->post_id . ", '" . $this->comment . "', '" . $this->visitore_name . "', curdate())";
         mysqli_query($connection, $query);
     }
 }

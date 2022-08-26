@@ -5,10 +5,10 @@ class Post
 
     public $id;
     public $post;
-    public $name;
-    public $date;
+    public $visitore_name;
+    public $created_at;
 
-    function __construct($id = null, $post = null, $name = null, $date = null)
+    function __construct($id = null, $post = null, $visitore_name = null, $created_at = null)
     {
 
         if (!empty($id)) {
@@ -19,20 +19,20 @@ class Post
             $this->post = $post;
         }
 
-        if (!empty($date)) {
-            $split_date = explode("-", $date);
-            $this->date = $split_date[1] . "." . $split_date[2] . "." . $split_date[0];
+        if (!empty($created_at)) {
+            $split_created_at = explode("-", $created_at);
+            $this->created_at = $split_created_at[1] . "." . $split_created_at[2] . "." . $split_created_at[0];
         }
 
-        if (!empty($name)) {
-            $this->name = $name;
+        if (!empty($visitore_name)) {
+            $this->visitore_name = $visitore_name;
         }
 
     }
 
     public function createPost($connection)
     {
-        $query = "insert into posts (post, name, date_posted) values ('" . $this->post . "', '" . $this->name . "', curdate())";
+        $query = "insert into posts (post, visitore_name, created_at) values ('" . $this->post . "', '" . $this->visitore_name . "', curdate())";
         mysqli_query($connection, $query);
     }
 
@@ -46,7 +46,7 @@ class Post
 
         $postArray = array();
         while ($row = mysqli_fetch_assoc($query)) {
-            $myPost = new Post($row["id"], $row["post"], $row['name'], $row['date_posted']);
+            $myPost = new Post($row["id"], $row["post"], $row['visitore_name'], $row['created_at']);
             array_push($postArray, $myPost);
         }
         return $postArray;

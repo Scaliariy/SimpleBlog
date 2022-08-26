@@ -10,17 +10,17 @@ function printPostsAndComments($connect)
 {
     foreach (Post::getBlogPosts($connect) as $key => $post) {
         echo "<div id='postDiv' class='col-12 p-3 border bg-light'>";
-        echo "<p id='postNameP' >by " . $post->name . "</p>";
+        echo "<p id='postNameP' >by " . $post->visitore_name . "</p>";
         echo "<p id='postPostP' >" . $post->post . "</p>";
         $grade = Grade::getRating($post->id)->grade;
         if ($grade == 0){
             $grade = "No rating";
         }
-        echo "<span id='postDateSpan' >" . $post->date . "</span>";
+        echo "<span id='postDateSpan' >" . $post->created_at . "</span>";
         $values[$key] = array(
-            'name_post' => $post->name,
+            'visitore_name_post' => $post->visitore_name,
             'post' => $post->post,
-            'date_post' => $post->date,
+            'created_at_post' => $post->created_at,
 
         );
         echo "<br><select class='rating' name='rating'>";
@@ -40,15 +40,15 @@ function printPostsAndComments($connect)
         if (Comment::postHaveComment($connect, $post->id)) {
             foreach (Comment::getPostComment($connect, $post->id) as $comm) {
                 echo "<div id='commentDiv' class='col-12 p-3 border bg-white'>";
-                echo "<p id='commentNameP' >by " . $comm->user_name . "</p>";
+                echo "<p id='commentNameP' >by " . $comm->visitore_name . "</p>";
                 echo "<p id='commentCommP' >" . $comm->comment . "</p>";
-                echo "<span id='commentDateSpan' >" . $comm->date . "</span>";
+                echo "<span id='commentDateSpan' >" . $comm->created_at . "</span>";
                 echo "</div>";
                 $values[$key][] = array(
                     'comments' => array(
-                        'name_comm' => $comm->user_name,
+                        'visitore_name_comm' => $comm->visitore_name,
                         'comment' => $comm->comment,
-                        'date_comm' => $comm->date,
+                        'created_at_comm' => $comm->created_at,
                     ),
 
                 );
@@ -78,7 +78,7 @@ function printFormComment($post_id)
                             <div class='modal-body'>
                                 <div class='input-group mb-3'>
                                     <label>
-                                        <input class='form-control' type='text' name='name' placeholder='Your name' required/>
+                                        <input class='form-control' type='text' name='visitore_name' placeholder='Your name' required/>
                                     </label>
                                         <input class='form-control' type='text' name='post_id' value='" . $post_id . "' hidden/>
                                 </div>

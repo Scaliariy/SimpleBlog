@@ -70,7 +70,7 @@ include("includes/includes.php");
                 <div class="modal-body">
                     <div class="input-group mb-3">
                         <label>
-                            <input class="form-control" type="text" name="name" placeholder="Your name"
+                            <input class="form-control" type="text" name="visitore_name" placeholder="Your name"
                                    required/>
                         </label>
                     </div>
