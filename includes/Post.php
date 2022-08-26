@@ -54,7 +54,7 @@ class Post
 
     static function negativePostCount($connection)
     {
-        $query = mysqli_query($connection, "select count(DISTINCT post_id) as posts from grades join posts bp on grades.post_id = bp.id where grade < 3");
+        $query = mysqli_query($connection, "select count(*) as posts from (select post_id from grades group by post_id having avg(grade) < 3) t");
         $row = mysqli_fetch_assoc($query);
 
         echo "Negative Posts: " . $row['posts'];
@@ -70,7 +70,7 @@ class Post
 
     static function positivePostCount($connection)
     {
-        $query = mysqli_query($connection, "select count(DISTINCT post_id) as posts from grades join posts bp on grades.post_id = bp.id WHERE grade > 3");
+        $query = mysqli_query($connection, "select count(*) as posts from (select post_id from grades group by post_id having avg(grade) > 3) t");
         $row = mysqli_fetch_assoc($query);
 
         echo "Positive Posts: " . $row['posts'];
