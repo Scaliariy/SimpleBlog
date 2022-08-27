@@ -172,7 +172,6 @@ include("includes/includes.php");
         console.log("showRate");
     });
     $(document).on('keyup','#visitore_name',function( e ) {
-    // $('#visitore_name').keyup(function(){
         if ($("#visitore_name").val().length > 0 && $("#post").val().length > 0) {
             $('#btnSave').prop('disabled', false);
         } else {
@@ -180,7 +179,6 @@ include("includes/includes.php");
         }
     });
     $(document).on('keyup','#post',function( e ) {
-        // $('#post').keyup(function(){
         if ($("#visitore_name").val().length > 0 && $("#post").val().length > 0) {
             $('#btnSave').prop('disabled', false);
         } else {
@@ -188,7 +186,6 @@ include("includes/includes.php");
         }
     });
     $(document).on('keyup','.NameComm',function( e ) {
-    // $('.NameComm').keyup(function(){
         if ($(".NameComm").val().length > 0 && $(".TextComm").val().length > 0) {
             $('.btnCommSave').prop('disabled', false);
         } else {
@@ -196,7 +193,6 @@ include("includes/includes.php");
         }
     });
     $(document).on('keyup','.TextComm',function( e ) {
-    // $('.TextComm').keyup(function(){
         if ($(".NameComm").val().length > 0 && $(".TextComm").val().length > 0) {
             $('.btnCommSave').prop('disabled', false);
         } else {
