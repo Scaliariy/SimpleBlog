@@ -69,18 +69,17 @@ include("includes/includes.php");
             <form id="postForm">
                 <div class="modal-body">
                     <div class="input-group mb-3">
-                        <label>
-                            <input class="form-control" type="text" name="visitore_name" placeholder="Your name"
-                                   required/>
+                        <label for="visitore_name">
+                            <input class="form-control" type="text" name="visitore_name" id="visitore_name" placeholder="Your name*"/>
                         </label>
                     </div>
-                    <div class="mb-3 text-start">
-                        <label for="post">Post:</label>
-                        <textarea class="form-control" name="post" placeholder="Text" required></textarea>
+                    <div class="input-group mb-3 text-start">
+                        <label for="post"></label>
+                        <textarea class="form-control" name="post" placeholder="Text*" id="post" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" name="submit" id="btnSave">Submit</button>
+                    <button type="submit" class="btn btn-primary" name="submit" id="btnSave" disabled>Submit</button>
                 </div>
             </form>
         </div>
@@ -171,6 +170,38 @@ include("includes/includes.php");
     $(window).on("unload", function(e) {
         $.session.set("showRate", "1");
         console.log("showRate");
+    });
+    $(document).on('keyup','#visitore_name',function( e ) {
+    // $('#visitore_name').keyup(function(){
+        if ($("#visitore_name").val().length > 0 && $("#post").val().length > 0) {
+            $('#btnSave').prop('disabled', false);
+        } else {
+            $('#btnSave').prop('disabled', true);
+        }
+    });
+    $(document).on('keyup','#post',function( e ) {
+        // $('#post').keyup(function(){
+        if ($("#visitore_name").val().length > 0 && $("#post").val().length > 0) {
+            $('#btnSave').prop('disabled', false);
+        } else {
+            $('#btnSave').prop('disabled', true);
+        }
+    });
+    $(document).on('keyup','.NameComm',function( e ) {
+    // $('.NameComm').keyup(function(){
+        if ($(".NameComm").val().length > 0 && $(".TextComm").val().length > 0) {
+            $('.btnCommSave').prop('disabled', false);
+        } else {
+            $('.btnCommSave').prop('disabled', true);
+        }
+    });
+    $(document).on('keyup','.TextComm',function( e ) {
+    // $('.TextComm').keyup(function(){
+        if ($(".NameComm").val().length > 0 && $(".TextComm").val().length > 0) {
+            $('.btnCommSave').prop('disabled', false);
+        } else {
+            $('.btnCommSave').prop('disabled', true);
+        }
     });
 </script>
 

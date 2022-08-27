@@ -79,17 +79,16 @@ function printFormComment($post_id)
                             <div class='modal-body'>
                                 <div class='input-group mb-3'>
                                     <label>
-                                        <input class='form-control' type='text' name='visitore_name' placeholder='Your name' required/>
+                                        <input class='form-control' type='text' name='visitore_name' placeholder='Your name*'/>
                                     </label>
-                                        <input class='form-control' type='text' name='post_id' value='" . $post_id . "' hidden/>
+                                        <input class='NameComm form-control' type='text' name='post_id' value='" . $post_id . "' hidden/>
                                 </div>
                                 <div class='mb-3 text-start'>
-                                    <label for='post'>Comment:</label>
-                                    <textarea class='form-control' name='comment' placeholder='Text' required></textarea>
+                                    <textarea class='TextComm form-control' name='comment' placeholder='Text*' required></textarea>
                                 </div>
                             </div>
                             <div class='modal-footer'>
-                                <button type='submit' class='btnCommSave btn btn-primary' name='submit'>Submit
+                                <button type='submit' class='btnCommSave btn btn-primary' name='submit' disabled>Submit
                                 </button>
                             </div>
                         </form>
