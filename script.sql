@@ -36,9 +36,7 @@ create table posts
     post          text                      not null,
     visitore_name varchar(50)               not null,
     created_at    date default '2000-01-01' not null
-)
-    engine = MyISAM
-    charset = latin1;
+);
 
 INSERT INTO blog.posts (id, post, visitore_name, created_at) VALUES (1, 'This is my first post on my new simple blog!', 'Ann', '2018-10-17');
 INSERT INTO blog.posts (id, post, visitore_name, created_at) VALUES (2, 'This post is all about web design! I love web design!', 'Rob', '2021-10-17');
